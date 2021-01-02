@@ -1,23 +1,28 @@
 #include <string>
 #include <vector>
-#include <set>
+#include <unordered_map>
+#include <iostream>
 
 using namespace std;
 
 string solution(vector<string> participant, vector<string> completion) {
     string answer = "";
+    unordered_map<string, int> m;
 
-    multiset<string> mset;
-
-    for ( auto iter = participant.begin(); iter != participant.end(); iter++ ){
-        mset.insert(*iter);
+    for( auto elem : participant ){
+        m[elem]++;
     }
 
-    for ( auto iter = completion.begin(); iter != completion.end(); iter++){
-        mset.erase(mset.find(*iter));
+    for( auto elem : completion ){
+        if( m.find(elem) != m.end() ){
+            m[elem]--;
+            if( m[elem] <= 0 ){
+                m.erase(elem);
+            }
+        }
     }
 
-    answer = *(mset.begin());
+    answer = (*(m.begin())).first;
 
     return answer;
 }
